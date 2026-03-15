@@ -52,14 +52,15 @@ ATLAS_URI = "mongodb+srv://db_free:Desindo20@cluster0.xrxgp9b.mongodb.net/?appNa
 
 if 'mongo_client' not in st.session_state:
     try:
-        # Kita tambahkan tlsAllowInvalidCertificates=True sebagai cadangan jika handshake gagal
+        # Gunakan tls=True dan tlsAllowInvalidCertificates=True untuk melewati blokir SSL Cloud
         st.session_state.mongo_client = pymongo.MongoClient(
             ATLAS_URI, 
-            serverSelectionTimeoutMS=5000, 
-            tlsCAFile=certifi.where(),
-            tlsAllowInvalidCertificates=True # Tambahkan baris ini
+            serverSelectionTimeoutMS=5000,
+            tls=True,
+            tlsAllowInvalidCertificates=True 
         )
-        st.session_state.mongo_client.server_info() 
+        # Cek apakah koneksi benar-benar tersambung
+        st.session_state.mongo_client.admin.command('ping')
     except Exception as e:
         st.error(f"Gagal terhubung ke MongoDB Atlas. Detail: {e}")
         st.stop()
