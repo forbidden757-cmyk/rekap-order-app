@@ -1,5 +1,0 @@
-streamlit
-pymongo
-dnspython
-pandas
-xhtml2pdf
