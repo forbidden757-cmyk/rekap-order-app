@@ -8,6 +8,7 @@ import os
 import math
 from io import BytesIO
 from xhtml2pdf import pisa
+import certifi
 
 # --- KONFIGURASI HALAMAN ---
 st.set_page_config(page_title="Sistem Rekap Order", page_icon="📦", layout="wide")
@@ -65,21 +66,17 @@ def terbilang(n):
     else: return "Angka terlalu besar"
 
 # ==========================================
-# KONEKSI MONGODB ATLAS
-# ==========================================
-@st.cache_resource
-def init_connection():
-    # =========================================================================
-    # TODO: GANTI TEKS DI BAWAH INI DENGAN CONNECTION STRING DARI ATLAS ANDA!
-    # =========================================================================
-    # ==========================================
 # KONEKSI MONGODB ATLAS (Versi Aman untuk Cloud)
 # ==========================================
+# =========================================================================
+# TODO: GANTI TEKS DI BAWAH INI DENGAN CONNECTION STRING DARI ATLAS ANDA!
+# =========================================================================
 ATLAS_URI = "mongodb+srv://db_free:Desindo20@cluster0.xrxgp9b.mongodb.net/?appName=Cluster0"
 
 if 'mongo_client' not in st.session_state:
     try:
-        st.session_state.mongo_client = pymongo.MongoClient(ATLAS_URI, serverSelectionTimeoutMS=5000)
+        # Menambahkan certifi agar lolos SSL di Streamlit Cloud
+        st.session_state.mongo_client = pymongo.MongoClient(ATLAS_URI, serverSelectionTimeoutMS=5000, tlsCAFile=certifi.where())
         st.session_state.mongo_client.server_info() # Trigger koneksi
     except Exception as e:
         st.error(f"Gagal terhubung ke MongoDB Atlas. Detail: {e}")
@@ -87,7 +84,6 @@ if 'mongo_client' not in st.session_state:
 
 client = st.session_state.mongo_client
 db = client["rekap_order_db"]
-
 profil_pt = load_profile()
 
 # --- HEADER APLIKASI ---
@@ -139,11 +135,12 @@ with tab_pemesan:
         
         col_del1, col_del2 = st.columns([3, 1])
         with col_del1:
+            # Bug list comprehension sudah diperbaiki di baris ini
             pilihan_hapus_pemesan = st.selectbox("Pilih Pemesan yang ingin dihapus:", [f"{p['_id']} - {p.get('nama', '-')}" for p in pemesans], key="del_pemesan")
         with col_del2:
             st.markdown("<br>", unsafe_allow_html=True)
             if st.button("Hapus Pemesan"):
-                db.pemesan.delete_one({"_id": ObjectId(pilihan_hapus_pemesan[0].split(" - ")[0])})
+                db.pemesan.delete_one({"_id": ObjectId(pilihan_hapus_pemesan.split(" - ")[0])})
                 st.success("Data berhasil dihapus!")
                 st.rerun()
 
@@ -208,7 +205,6 @@ with tab_order:
         
         col_del1, col_del2 = st.columns([3, 1])
         with col_del1:
-            # Menggunakan .get() agar tidak crash jika data lama kosong
             pilihan_hapus_order = st.selectbox("Pilih Item Order yang ingin dihapus:", [f"{o['_id']} - {o.get('no_order', '-')} ({o.get('deskripsi', '-')})" for o in orders], key="del_order")
         with col_del2:
             st.markdown("<br>", unsafe_allow_html=True)
