@@ -52,22 +52,28 @@ ATLAS_URI = "mongodb+srv://db_free:Desindo20@cluster0.xrxgp9b.mongodb.net/?appNa
 
 if 'mongo_client' not in st.session_state:
     try:
-        # Gunakan tls=True dan tlsAllowInvalidCertificates=True untuk melewati blokir SSL Cloud
+        # Kita gunakan opsi paling lengkap untuk menembus handshake TLS
         st.session_state.mongo_client = pymongo.MongoClient(
-            ATLAS_URI, 
+            ATLAS_URI,
             serverSelectionTimeoutMS=5000,
             tls=True,
-            tlsAllowInvalidCertificates=True 
+            tlsAllowInvalidCertificates=True,
+            connectTimeoutMS=30000,
+            socketTimeoutMS=30000
         )
-        # Cek apakah koneksi benar-benar tersambung
+        # Tes koneksi dengan perintah ping sederhana
         st.session_state.mongo_client.admin.command('ping')
     except Exception as e:
-        st.error(f"Gagal terhubung ke MongoDB Atlas. Detail: {e}")
+        # Jika masih gagal, tampilkan pesan bantuan yang lebih jelas
+        st.error(f"Gagal terhubung ke MongoDB Atlas.")
+        st.info("Tips: Pastikan Password Anda tidak mengandung simbol seperti @, :, / atau #. Jika ada, ganti password di MongoDB Atlas dulu.")
+        st.code(str(e))
         st.stop()
 
 client = st.session_state.mongo_client
 db = client["rekap_order_db"]
-profil_pt = load_profile()
+
+#profil_pt = load_profile()
 
 # --- HEADER APLIKASI ---
 st.title("📦 Sistem Rekap Order & Invoice")
