@@ -3,3 +3,4 @@ pymongo
 dnspython
 pandas
 xhtml2pdf
+certifi
