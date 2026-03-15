@@ -72,16 +72,21 @@ def init_connection():
     # =========================================================================
     # TODO: GANTI TEKS DI BAWAH INI DENGAN CONNECTION STRING DARI ATLAS ANDA!
     # =========================================================================
-    ATLAS_URI = "mongodb+srv://db_free:Desindo20@cluster0.xrxgp9b.mongodb.net/?appName=Cluster0"
-    return pymongo.MongoClient(ATLAS_URI, serverSelectionTimeoutMS=5000)
+    # ==========================================
+# KONEKSI MONGODB ATLAS (Versi Aman untuk Cloud)
+# ==========================================
+ATLAS_URI = "mongodb+srv://db_free:Desindo20@cluster0.xrxgp9b.mongodb.net/?appName=Cluster0"
 
-try:
-    client = init_connection()
-    client.server_info() 
-    db = client["rekap_order_db"]
-except Exception as e:
-    st.error(f"Gagal terhubung ke MongoDB Atlas. Pastikan internet aktif. Detail: {e}")
-    st.stop()
+if 'mongo_client' not in st.session_state:
+    try:
+        st.session_state.mongo_client = pymongo.MongoClient(ATLAS_URI, serverSelectionTimeoutMS=5000)
+        st.session_state.mongo_client.server_info() # Trigger koneksi
+    except Exception as e:
+        st.error(f"Gagal terhubung ke MongoDB Atlas. Detail: {e}")
+        st.stop()
+
+client = st.session_state.mongo_client
+db = client["rekap_order_db"]
 
 profil_pt = load_profile()
 
