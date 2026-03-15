@@ -72,8 +72,7 @@ if 'mongo_client' not in st.session_state:
 
 client = st.session_state.mongo_client
 db = client["rekap_order_db"]
-
-#profil_pt = load_profile()
+profil_pt = load_profile()
 
 # --- HEADER APLIKASI ---
 st.title("📦 Sistem Rekap Order & Invoice")
