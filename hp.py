@@ -135,8 +135,8 @@ with tab_pemesan:
         
         col_del1, col_del2 = st.columns([3, 1])
         with col_del1:
-            # Bug list comprehension sudah diperbaiki di baris ini
-            pilihan_hapus_pemesan = st.selectbox("Pilih Pemesan yang ingin dihapus:", [f"{p['_id']} - {p.get('nama', '-')}" for p in pemesans], key="del_pemesan")
+            # Atribut key dihapus agar tidak error saat reload
+            pilihan_hapus_pemesan = st.selectbox("Pilih Pemesan yang ingin dihapus:", [f"{p['_id']} - {p.get('nama', '-')}" for p in pemesans])
         with col_del2:
             st.markdown("<br>", unsafe_allow_html=True)
             if st.button("Hapus Pemesan"):
@@ -205,7 +205,8 @@ with tab_order:
         
         col_del1, col_del2 = st.columns([3, 1])
         with col_del1:
-            pilihan_hapus_order = st.selectbox("Pilih Item Order yang ingin dihapus:", [f"{o['_id']} - {o.get('no_order', '-')} ({o.get('deskripsi', '-')})" for o in orders], key="del_order")
+            # Atribut key dihapus agar tidak error saat reload
+            pilihan_hapus_order = st.selectbox("Pilih Item Order yang ingin dihapus:", [f"{o['_id']} - {o.get('no_order', '-')} ({o.get('deskripsi', '-')})" for o in orders])
         with col_del2:
             st.markdown("<br>", unsafe_allow_html=True)
             if st.button("Hapus Item"):
