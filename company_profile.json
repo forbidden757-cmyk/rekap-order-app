@@ -1,0 +1,13 @@
+{
+    "nama_perusahaan": "PT. Perusahaan Maju Jaya",
+    "deskripsi": "Penyedia Layanan Terbaik",
+    "alamat": "Jl. Sudirman No. 1, Jakarta",
+    "logo_path": "",
+    "pembuat_invoice": "Joyboy",
+    "jabatan_pembuat": "CEO",
+    "ttd_path": "",
+    "rekening": [
+        "BCA - 1234567890 a/n PT Maju",
+        "Mandiri - 0987654321 a/n PT Maju"
+    ]
+}
