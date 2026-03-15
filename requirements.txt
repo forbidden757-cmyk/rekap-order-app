@@ -1,6 +1,5 @@
 streamlit
-pymongo
-dnspython
+pymongo[srv]
 pandas
 xhtml2pdf
 certifi
