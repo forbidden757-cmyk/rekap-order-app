@@ -48,7 +48,7 @@ def format_rupiah(angka):
 # KONEKSI MONGODB ATLAS
 # ==========================================
 # GANTI LINK DI BAWAH INI DENGAN LINK ATLAS ANDA
-ATLAS_URI = "mongodb+srv://db_free:Desindo20@cluster0.xrxgp9b.mongodb.net/?appName=Cluster0"
+ATLAS_URI = "mongodb://db_free:Desindo20@ac-ylyusyc-shard-00-00.xrxgp9b.mongodb.net:27017,ac-ylyusyc-shard-00-01.xrxgp9b.mongodb.net:27017,ac-ylyusyc-shard-00-02.xrxgp9b.mongodb.net:27017/?ssl=true&replicaSet=atlas-8o0c08-shard-0&authSource=admin&appName=Cluster0"
 
 if 'mongo_client' not in st.session_state:
     try:
